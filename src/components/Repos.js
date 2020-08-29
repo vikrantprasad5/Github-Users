@@ -5,44 +5,52 @@ import { ExampleChart, Pie3D, Column3D, Bar3D, Doughnut2D } from './Charts';
 const Repos = () => {
   const {repos} = React.useContext(GithubContext);
 //  console.log(repos);
-  let languages = repos.reduce((total,item) =>{
-    const {language} = item;
+  const languages = repos.reduce((total,item) =>{
+    const {language,stargazers_count} = item;
     if(!language) return total;
     // console.log(language);
     if(!total[language]) {
-      total[language]= {label:language,value:1};
+      total[language]= {label:language,value:1,stars:stargazers_count};
     }
     else{
       total[language]={
       ...total[language],
-      value: total[language].value +1
+      value: total[language].value +1,
+      stars: total[language].stars +stargazers_count
       };
     }
     
     return  total;
   } ,{})
-  languages = Object.values(languages).sort((a,b)=>{
+  const mostUsed = Object.values(languages).sort((a,b)=>{
     return b.value -a.value;
   }).slice(0,5);
-  // console.log(languages);
-  // const chartData = [
-  //   {
-  //     label: "HTML",
-  //     value: "13"
-  //   },
-  //   {
-  //     label: "CSS",
-  //     value: "50"
-  //   },
-  //   {
-  //     label: "Javascript",
-  //     value: "80"
-  //   }
-  // ];
+
+  //most Stars per language
+  const mostPopular = Object.values(languages).sort((a,b)=>{
+    return b.stars - a.stars;
+  }).map((item)=>{
+    return {...item,value:item.stars}
+  }).slice(0,5);
+  const chartData = [
+    {
+      label: "HTML",
+      value: "13"
+    },
+    {
+      label: "CSS",
+      value: "50"
+    },
+    {
+      label: "Javascript",
+      value: "80"
+    }
+  ];
   return <section className="section">
     <Wrapper className="section-center">
-      <Pie3D data={languages}/>
-      {/* <ExampleChart data={chartData}/> */}
+      <Pie3D data={mostUsed}/>
+      <div></div>
+      <Doughnut2D data={mostPopular}/>
     </Wrapper>
   </section>;
 };
@@ -58,6 +66,7 @@ const Wrapper = styled.div`
   @media (min-width: 1200px) {
     grid-template-columns: 2fr 3fr;
   }
+
 
   div {
     width: 100% !important;
