@@ -14,27 +14,31 @@ const Card = () => {
     location,
     twitter_username
   } = githubUser;
-  return <Wrapper>
-    <header>
-      <img src={avatar_url} alt={name}/>
-      <div>
-        <h4>{name}</h4>
-        <p>@{twitter_username || 'john doe'}</p>
-      </div>
-      <a href={html_url}>follow</a>
-      <p className="bio">{bio}</p>
-      <div className="links">
+  return (
+    <Wrapper>
+      <header>
+        <img src={avatar_url} alt={name} />
+        <div>
+          <h4>{name}</h4>
+          <p>@{twitter_username || 'john doe'}</p>
+        </div>
+        <a href={html_url}>follow</a>
+      </header>
+      <p className='bio'>{bio}</p>
+      <div className='links'>
         <p>
-          <MdBusiness></MdBusiness>{company}
+          <MdBusiness></MdBusiness> {company}
         </p>
         <p>
-          <MdLocationOn></MdLocationOn>{location||"earth"}
+          <MdLocationOn></MdLocationOn> {location || 'earth'}
         </p>
-        <a href={`https://${blog}`}><MdLink></MdLink>{blog}</a>
+        <a href={`https://${blog}`}>
+          <MdLink></MdLink>
+          {blog}
+        </a>
       </div>
-    </header>
-    
-  </Wrapper>;
+    </Wrapper>
+  );
 };
 const Wrapper = styled.article`
   background: var(--clr-white);
